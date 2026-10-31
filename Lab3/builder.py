@@ -14,8 +14,10 @@ class LegoSet:
 
 #родитель общие шаги 
 class LegoBuilder:
-    def __init__(self):
+    def __init__(self, tail_flag=False, wings_flag=False):
         self.set = LegoSet()
+        self.has_tail = tail_flag
+        self.has_wings = wings_flag
 
     def build_head(self):
         pass
@@ -23,7 +25,10 @@ class LegoBuilder:
     def build_body(self):
         pass
 
-    def build_tail_or_wings(self):
+    def build_tail(self):
+        pass
+
+    def build_wings(self):
         pass
 
     def build_details(self):
@@ -35,6 +40,9 @@ class LegoBuilder:
 
 # дети, конкретно что собираем
 class SquirrelBuilder(LegoBuilder):
+    def __init__(self, tail_flag=True, wings_flag=False):
+        super().__init__(tail_flag, wings_flag)
+
     def build_head(self):
         self.set.name = "Белка"
         self.set.add("Маленькие рыжие детали 7шт, черные 2шт")
@@ -42,7 +50,7 @@ class SquirrelBuilder(LegoBuilder):
     def build_body(self):
         self.set.add("Большие рыжие детали 8 шт")
 
-    def build_tail_or_wings(self):
+    def build_tail(self):
         self.set.add("Маленькие рыжие детали 5шт")
 
     def build_details(self):
@@ -50,6 +58,9 @@ class SquirrelBuilder(LegoBuilder):
 
 
 class FoxBuilder(LegoBuilder):
+    def __init__(self, tail_flag=True, wings_flag=False):
+        super().__init__(tail_flag, wings_flag)
+
     def build_head(self):
         self.set.name = "Лиса"
         self.set.add("Маленькие рыжие детали 4шт, черные 2шт, белые 1шт")
@@ -57,7 +68,7 @@ class FoxBuilder(LegoBuilder):
     def build_body(self):
         self.set.add("Большие рыжие детали 8 шт, черные 4 шт")
 
-    def build_tail_or_wings(self):
+    def build_tail(self):
         self.set.add("Маленькие рыжие детали 5шт, белые 1шт")
 
     def build_details(self):
@@ -65,6 +76,9 @@ class FoxBuilder(LegoBuilder):
 
 
 class OwlBuilder(LegoBuilder):
+    def __init__(self, tail_flag=False, wings_flag=True):
+        super().__init__(tail_flag, wings_flag)
+
     def build_head(self):
         self.set.name = "Сова"
         self.set.add("Маленькие коричневые детали 4шт, маленькие рыжие 2шт")
@@ -72,11 +86,11 @@ class OwlBuilder(LegoBuilder):
     def build_body(self):
         self.set.add("Большие черные детали 5 шт")
 
-    def build_tail_or_wings(self):
+    def build_wings(self):
         self.set.add("Серые пластины 2шт")
 
     def build_details(self):
-        self.set.add("Желтый круг") #клюв
+        self.set.add("Желтый круг")  #клюв
 
 #билдер то как мы собираем, в какой последовательности
 class Instruction:
@@ -86,7 +100,10 @@ class Instruction:
     def build(self):
         self.builder.build_head()
         self.builder.build_body()
-        self.builder.build_tail_or_wings()
+        if self.builder.has_tail:
+            self.builder.build_tail()
+        if self.builder.has_wings:
+            self.builder.build_wings()
         self.builder.build_details()
 
 
